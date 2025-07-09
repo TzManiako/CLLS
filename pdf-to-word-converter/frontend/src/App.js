@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Download, FileText, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { Upload, Download, FileText, AlertCircle, CheckCircle, Loader2, Shield, Zap, Star } from 'lucide-react';
 
 const PdfToWordConverter = () => {
   const [file, setFile] = useState(null);
@@ -68,7 +68,7 @@ const PdfToWordConverter = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const API_URL = 'https://back-production-4f26.up.railway.app';
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
       const response = await fetch(`${API_URL}/convert`, {
         method: 'POST',
         body: formData,
@@ -120,196 +120,248 @@ const PdfToWordConverter = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="text-center py-16">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-6">
-          <FileText className="h-8 w-8 text-white" />
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-xl mb-4">
+              <FileText className="h-8 w-8 text-blue-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Convertidor PDF a Word
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Transforma tus archivos PDF a formato Word manteniendo la calidad original
+            </p>
+            <div className="flex items-center justify-center mt-4 space-x-4">
+              <div className="flex items-center text-sm text-gray-500">
+                <Shield className="h-4 w-4 mr-1" />
+                Seguro y privado
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <Zap className="h-4 w-4 mr-1" />
+                Conversión rápida
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <Star className="h-4 w-4 mr-1" />
+                Alta calidad
+              </div>
+            </div>
+          </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-          Convertidor PDF a Word
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto px-4">
-          Convierte tus archivos PDF a formato Word manteniendo el formato original, 
-          imágenes y estructura de manera rápida y sencilla.
-        </p>
       </div>
 
-      {/* Main Converter */}
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          
-          {/* Upload Zone */}
-          <div
-            className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
-              file 
-                ? 'border-green-300 bg-green-50' 
-                : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-            }`}
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Upload Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-8">
             
-            {!file ? (
-              <div>
-                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-lg text-gray-600 mb-2">
-                  Arrastra tu archivo PDF aquí o haz click para seleccionar
-                </p>
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Seleccionar archivo
-                </button>
-                <p className="text-sm text-gray-500 mt-4">
-                  Tamaño máximo: 50MB
-                </p>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center space-x-3">
-                <FileText className="h-8 w-8 text-green-500" />
+            {/* Upload Zone */}
+            <div
+              className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-all duration-200 ${
+                file 
+                  ? 'border-green-300 bg-green-50' 
+                  : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+              }`}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+              
+              {!file ? (
                 <div>
-                  <p className="text-lg font-medium text-gray-800">{file.name}</p>
-                  <p className="text-sm text-gray-500">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                  <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Upload className="h-10 w-10 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Sube tu archivo PDF
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    Arrastra y suelta tu archivo aquí o haz click para seleccionar
+                  </p>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                  >
+                    <Upload className="h-5 w-5 mr-2" />
+                    Seleccionar archivo
+                  </button>
+                  <p className="text-sm text-gray-500 mt-4">
+                    Tamaño máximo: 50MB • Solo archivos PDF
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <div className="bg-green-100 rounded-full p-3 mr-4">
+                    <FileText className="h-8 w-8 text-green-600" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-lg font-semibold text-gray-900">{file.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB • Listo para convertir
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Error Messages */}
+            {error && (
+              <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <AlertCircle className="h-5 w-5 text-red-400 mr-3" />
+                  <p className="text-sm text-red-800">{error}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Progress Bar */}
+            {isConverting && (
+              <div className="mt-6">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-medium text-gray-700">Procesando documento...</span>
+                  <span className="text-sm font-medium text-blue-600">{Math.round(progress)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="flex items-center justify-center mt-6">
+                  <Loader2 className="h-5 w-5 text-blue-600 animate-spin mr-2" />
+                  <span className="text-sm text-gray-600">Convirtiendo PDF a Word...</span>
+                </div>
+              </div>
+            )}
+
+            {/* Success Message */}
+            {success && (
+              <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  <p className="text-sm text-green-800">
+                    ¡Conversión completada exitosamente! Tu archivo está listo para descargar.
                   </p>
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Error Messages */}
-          {error && (
-            <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-center space-x-3">
-              <AlertCircle className="h-5 w-5 text-red-500" />
-              <p className="text-red-700">{error}</p>
+            {/* Action Buttons */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+              {file && !isConverting && !success && (
+                <button
+                  onClick={convertPdfToWord}
+                  className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  <FileText className="h-5 w-5 mr-2" />
+                  Convertir a Word
+                </button>
+              )}
+
+              {downloadUrl && (
+                <button
+                  onClick={downloadFile}
+                  className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Descargar Word
+                </button>
+              )}
+
+              {(file || success) && (
+                <button
+                  onClick={resetApp}
+                  className="inline-flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  Convertir otro archivo
+                </button>
+              )}
             </div>
-          )}
 
-          {/* Progress Bar */}
-          {isConverting && (
-            <div className="mt-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">Convirtiendo archivo...</span>
-                <span className="text-sm text-gray-600">{Math.round(progress)}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-center mt-4">
-                <Loader2 className="h-5 w-5 text-blue-500 animate-spin mr-2" />
-                <span className="text-gray-600">Procesando documento...</span>
-              </div>
-            </div>
-          )}
-
-          {/* Success Message */}
-          {success && (
-            <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4 flex items-center space-x-3">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              <p className="text-green-700">¡Conversión completada exitosamente!</p>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-            {file && !isConverting && !success && (
-              <button
-                onClick={convertPdfToWord}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-              >
-                <FileText className="h-5 w-5" />
-                <span>Convertir a Word</span>
-              </button>
-            )}
-
-            {downloadUrl && (
-              <button
-                onClick={downloadFile}
-                className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-              >
-                <Download className="h-5 w-5" />
-                <span>Descargar Word</span>
-              </button>
-            )}
-
-            {(file || success) && (
-              <button
-                onClick={resetApp}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-colors"
-              >
-                Convertir otro archivo
-              </button>
-            )}
           </div>
         </div>
 
-        {/* Features */}
+        {/* Features Grid */}
         <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-              <CheckCircle className="h-6 w-6 text-blue-600" />
+              <Shield className="h-6 w-6 text-blue-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Formato Preservado</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Formato Preservado</h3>
             <p className="text-gray-600 text-sm">
-              Mantiene la estructura original del PDF incluyendo imágenes, tablas y estilos.
+              Mantiene la estructura original incluyendo imágenes, tablas y estilos del documento.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-              <FileText className="h-6 w-6 text-green-600" />
+              <Zap className="h-6 w-6 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Alta Calidad</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Conversión Rápida</h3>
             <p className="text-gray-600 text-sm">
-              Conversión precisa que preserva la calidad y legibilidad del documento original.
+              Procesamiento optimizado que convierte tus documentos en segundos con alta precisión.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              <Upload className="h-6 w-6 text-purple-600" />
+              <Star className="h-6 w-6 text-purple-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Fácil de Usar</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Calidad Profesional</h3>
             <p className="text-gray-600 text-sm">
-              Interfaz simple e intuitiva. Solo arrastra, convierte y descarga tu archivo.
+              Tecnología avanzada que garantiza resultados de calidad profesional en cada conversión.
             </p>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-2xl font-bold text-gray-900">99.9%</div>
+              <div className="text-sm text-gray-600">Precisión</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900">&lt;30s</div>
+              <div className="text-sm text-gray-600">Tiempo promedio</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900">50MB</div>
+              <div className="text-sm text-gray-600">Tamaño máximo</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-gray-900">24/7</div>
+              <div className="text-sm text-gray-600">Disponible</div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Footer simplificado con marca de agua César Loreth */}
-      <footer className="bg-white border-t border-gray-200">
+      {/* Footer profesional simplificado */}
+      <footer className="bg-white border-t border-gray-200 mt-16">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="text-center space-y-3">
-            {/* Marca de agua principal */}
-            <div className="flex items-center justify-center space-x-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-lg font-semibold text-gray-800">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-3">
+              <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+              <span className="text-lg font-semibold text-gray-900">
                 Desarrollado por César Loreth
               </span>
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
             </div>
-            
-            {/* Copyright */}
-            <p className="text-sm text-gray-600">
-              © 2024 César Loreth. Todos los derechos reservados.
+            <p className="text-sm text-gray-600 mb-2">
+              © 2025 César Loreth. Todos los derechos reservados.
             </p>
-            
-            {/* Línea adicional de marca */}
             <p className="text-xs text-gray-500">
-              César Loreth™ - Soluciones innovadoras en conversión de documentos
+              César Loreth™ - Tecnología innovadora INDRA COL
             </p>
           </div>
         </div>
@@ -318,4 +370,4 @@ const PdfToWordConverter = () => {
   );
 };
 
-export default PdfToWordConverter
+export default PdfToWordConverter;
