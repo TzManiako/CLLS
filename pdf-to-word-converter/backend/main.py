@@ -21,11 +21,7 @@ app = FastAPI(title="PDF to Word Converter API", version="1.0.0")
 # CORS actualizado para Railway
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "https://*.railway.app",
-        "https://*.vercel.app",
-    ],
+    allow_origins=["*"],  # Permite todas las URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -141,5 +137,7 @@ async def convert_pdf(file: UploadFile = File(...)):
 # Railway usa la variable PORT
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
+    import os
+    # Obtener puerto de Railway o usar 8000 por defecto
+    port = int(os.environ.get("PORT", "8000"))
     uvicorn.run(app, host="0.0.0.0", port=port)

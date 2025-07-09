@@ -68,7 +68,7 @@ const PdfToWordConverter = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      const API_URL = 'https://back-production-4f26.up.railway.app';
       const response = await fetch(`${API_URL}/convert`, {
         method: 'POST',
         body: formData,

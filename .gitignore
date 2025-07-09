@@ -1,0 +1,30 @@
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/venv/
+**/env/
+**/ENV/
+
+# Node.js
+**/node_modules/
+**/build/
+**/dist/
+**/npm-debug.log*
+
+# Archivos temporales
+**/temp_files/*
+!**/temp_files/.gitkeep
+
+# Variables de entorno
+**/.env
+**/.env.local
+**/.env.production
+
+# Vercel
+**/.vercel
+
+# IDE y OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
